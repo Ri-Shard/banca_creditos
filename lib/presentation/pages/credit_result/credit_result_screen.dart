@@ -1,17 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:banca_creditos/presentation/pages/credit_result/widgets/save_modal.dart';
+import 'package:banca_creditos/presentation/pages/home/credit_controller.dart';
 import 'package:banca_creditos/presentation/widgets/buttons.dart';
 import 'package:banca_creditos/presentation/widgets/my_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CreditResultScreen extends StatelessWidget {
-  const CreditResultScreen({super.key});
+  CreditResultScreen({super.key});
+  final creditcontroller = Get.find<CreditController>();
 
   @override
   Widget build(BuildContext context) {
     final localwidth = MediaQuery.of(context).size.width;
-
+    List<Cuota> table = creditcontroller.calcularTablaAmortizacion();
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -93,22 +96,20 @@ class CreditResultScreen extends StatelessWidget {
                       label: Text('Abono a capital'),
                     ),
                   ],
-                  rows: const <DataRow>[
-                    DataRow(
-                      cells: <DataCell>[
-                        DataCell(Text('1')),
-                        DataCell(Text(
-                          '\$12.000.000',
-                          style: TextStyle(color: MyTheme.textGray),
-                        )),
-                        DataCell(Text('1,5%')),
-                        DataCell(Text('+\$12.000.000',
+                  rows: table.map((row) {
+                    return DataRow(
+                      cells: [
+                        DataCell(Text(row.numeroCuota.toString())),
+                        DataCell(Text(row.valorCuota.toStringAsFixed(2),
+                            style: TextStyle(color: MyTheme.textGray))),
+                        DataCell(Text(row.interes.toStringAsFixed(2))),
+                        DataCell(Text(row.abonoCapital.toStringAsFixed(2),
                             style: TextStyle(
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold))),
                       ],
-                    ),
-                  ],
+                    );
+                  }).toList(),
                 ),
               ),
             ),
@@ -117,7 +118,9 @@ class CreditResultScreen extends StatelessWidget {
               content: const Text('Descargar tabla',
                   style: TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold)),
-              ontap: () {},
+              ontap: () async {
+                await creditcontroller.exportToExcel(table);
+              },
             ),
             const SizedBox(
               height: 10,

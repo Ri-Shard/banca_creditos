@@ -3,15 +3,25 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 
 class Credit {
-  const Credit(this.userId,
+  Credit(this.userId,
       {required this.amount,
       required this.date,
-      required this.fee,
+      required this.quota,
       required this.interest});
 
-  final Int amount;
-  final DateTime date;
-  final int fee;
+  final String date;
+  final String quota;
+  final String amount;
   final double interest;
-  final String userId;
+  String userId;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['date'] = date;
+    data['userId'] = userId;
+    data['interest'] = interest;
+    data['quota'] = quota;
+    data['amount'] = amount;
+    return data;
+  }
 }

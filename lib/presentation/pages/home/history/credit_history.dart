@@ -1,3 +1,4 @@
+import 'package:banca_creditos/domain/entities/credit.dart';
 import 'package:banca_creditos/presentation/pages/home/credit_controller.dart';
 import 'package:banca_creditos/presentation/widgets/my_theme.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,6 @@ import 'package:get/get.dart';
 
 class CreditHistoryScreen extends StatelessWidget {
   final creditcontroller = Get.find<CreditController>();
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -72,64 +72,78 @@ class CreditHistoryScreen extends StatelessWidget {
                     )),
                   ),
                 ],
-                rows: const <DataRow>[
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Center(
-                        child: Text(
-                          '\$12.000.000',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: MyTheme.textGray),
-                        ),
-                      )),
-                      DataCell(Center(
-                        child: Text(
-                          '12/10/23',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: MyTheme.textBlack),
-                        ),
-                      )),
-                      DataCell(Center(
-                          child: Text(
-                        '12',
-                      ))),
-                      DataCell(Center(
-                        child: Text('1.5%',
-                            style: TextStyle(
-                              color: MyTheme.textBlack,
-                            )),
-                      )),
+                rows: creditcontroller.creditslist.map((row) {
+                  return DataRow(
+                    cells: [
+                      DataCell(Text(row.amount.toString())),
+                      DataCell(Text(row.date,
+                          style: TextStyle(color: MyTheme.textGray))),
+                      DataCell(Text(row.quota)),
+                      DataCell(Text(row.interest.toString(),
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.bold))),
                     ],
-                  ),
-                  DataRow(
-                    cells: <DataCell>[
-                      DataCell(Center(
-                        child: Text(
-                          '\$12.000.000',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: MyTheme.textGray),
-                        ),
-                      )),
-                      DataCell(Center(
-                        child: Text(
-                          '12/10/23',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: MyTheme.textBlack),
-                        ),
-                      )),
-                      DataCell(Center(
-                          child: Text(
-                        '12',
-                      ))),
-                      DataCell(Center(
-                        child: Text('1.5%',
-                            style: TextStyle(
-                              color: MyTheme.textBlack,
-                            )),
-                      )),
-                    ],
-                  ),
-                ],
+                  );
+                }).toList(),
+                //  const <DataRow>[
+                //   DataRow(
+                //     cells: <DataCell>[
+                //       DataCell(Center(
+                //         child: Text(
+                //           '\$12.000.000',
+                //           textAlign: TextAlign.center,
+                //           style: TextStyle(color: MyTheme.textGray),
+                //         ),
+                //       )),
+                //       DataCell(Center(
+                //         child: Text(
+                //           '12/10/23',
+                //           textAlign: TextAlign.center,
+                //           style: TextStyle(color: MyTheme.textBlack),
+                //         ),
+                //       )),
+                //       DataCell(Center(
+                //           child: Text(
+                //         '12',
+                //       ))),
+                //       DataCell(Center(
+                //         child: Text('1.5%',
+                //             style: TextStyle(
+                //               color: MyTheme.textBlack,
+                //             )),
+                //       )),
+                //     ],
+                //   ),
+                //   DataRow(
+                //     cells: <DataCell>[
+                //       DataCell(Center(
+                //         child: Text(
+                //           '\$12.000.000',
+                //           textAlign: TextAlign.center,
+                //           style: TextStyle(color: MyTheme.textGray),
+                //         ),
+                //       )),
+                //       DataCell(Center(
+                //         child: Text(
+                //           '12/10/23',
+                //           textAlign: TextAlign.center,
+                //           style: TextStyle(color: MyTheme.textBlack),
+                //         ),
+                //       )),
+                //       DataCell(Center(
+                //           child: Text(
+                //         '12',
+                //       ))),
+                //       DataCell(Center(
+                //         child: Text('1.5%',
+                //             style: TextStyle(
+                //               color: MyTheme.textBlack,
+                //             )),
+                //       )),
+                //     ],
+                //   ),
+                // ],
               ),
             ),
           ),

@@ -63,7 +63,7 @@ appRoutes() => [
           binding: CreditBinding()),
       GetPage(
           name: '/result',
-          page: () => const CreditResultScreen(),
+          page: () => CreditResultScreen(),
           middlewares: [MyMiddelware()],
           transition: Transition.downToUp,
           transitionDuration: const Duration(milliseconds: 200),

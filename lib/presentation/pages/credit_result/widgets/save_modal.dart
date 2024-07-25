@@ -1,3 +1,4 @@
+import 'package:banca_creditos/presentation/pages/home/credit_controller.dart';
 import 'package:banca_creditos/presentation/widgets/buttons.dart';
 import 'package:banca_creditos/presentation/widgets/my_theme.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class SaveModal extends StatelessWidget {
-  const SaveModal({Key? key}) : super(key: key);
+  SaveModal({Key? key}) : super(key: key);
+  final creditcontroller = Get.find<CreditController>();
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,14 @@ class SaveModal extends StatelessWidget {
             content: const Text('Guardar',
                 style: TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold)),
-            ontap: () {},
+            ontap: () async {
+              final response = await creditcontroller.saveCredit();
+              if (response == 'Guardado') {
+                Get.toNamed('/home');
+              } else {
+                Get.snackbar('Error', 'Error al guardar');
+              }
+            },
           ),
           const SizedBox(
             height: 10,

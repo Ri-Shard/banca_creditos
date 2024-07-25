@@ -6,24 +6,12 @@ class LoginReprositoryImpl extends LoginRepositoryInterface {
   final supabase = Supabase.instance.client;
 
   @override
-  Future<UserBank> getUser(User usersearch) async {
-    final data = await supabase
-        .from('userbank')
-        .select()
-        .eq('email', usersearch.email!)
-        .single();
-    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-    return UserBank(name: '', id: '', email: '', password: '');
-  }
-
-  @override
   Future<String> login(String email, String password) async {
     try {
       final AuthResponse res = await supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
-      getUser(res.user!);
       return 'Bienvenido';
     } catch (e) {
       return 'Credenciales Erroneas';

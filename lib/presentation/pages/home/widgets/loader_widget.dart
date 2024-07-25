@@ -1,12 +1,15 @@
 import 'package:banca_creditos/presentation/widgets/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_gradient_spinner/circular_gradient_spinner.dart';
+import 'package:get/get.dart';
 
 class LoaderWidget extends StatelessWidget {
   const LoaderWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 3))
+        .whenComplete(() => Get.toNamed('/result'));
     return Scaffold(
       body: Center(
         child: Column(

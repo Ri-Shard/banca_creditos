@@ -5,9 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class MaxCuotaModal extends StatelessWidget {
-  MaxCuotaModal({Key? key}) : super(key: key);
   final creditcontroller = Get.find<CreditController>();
+  final String maxcuotadebt;
 
+  MaxCuotaModal({super.key, required this.maxcuotadebt});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -26,6 +27,9 @@ class MaxCuotaModal extends StatelessWidget {
               Spacer(),
               GestureDetector(
                 onTap: () {
+                  // creditcontroller.salarycontroller.clear();
+                  // creditcontroller.valuecontroller.clear();
+                  // creditcontroller.quotacontroller.clear();
                   Get.toNamed('/loading');
                 },
                 child: CircleAvatar(
@@ -38,8 +42,8 @@ class MaxCuotaModal extends StatelessWidget {
               )
             ],
           ),
-          const Text(
-            '\$185.798.098,00',
+          Text(
+            '\$${maxcuotadebt}',
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.bold,
@@ -52,8 +56,9 @@ class MaxCuotaModal extends StatelessWidget {
           _buildInfoRow('Tasa Efectiva Anual desde', '43.26%'),
           const SizedBox(height: 16),
           _buildInfoRow('Tasa Mensual Vencida desde', '3.04%'),
-          const SizedBox(height: 16),
-          _buildInfoRow('Valor total del prestamo', '\$950'),
+          SizedBox(height: 16),
+          _buildInfoRow('Valor total del prestamo',
+              '\$${creditcontroller.valuecontroller.text}'),
           Divider(
             color: MyTheme.anotherTextGray,
           ),

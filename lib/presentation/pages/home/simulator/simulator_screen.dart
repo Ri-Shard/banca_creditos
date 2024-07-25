@@ -65,11 +65,9 @@ class SimulatorScreen extends StatelessWidget {
                   creditcontroller.interest = 0.3;
                 }
                 if (value == 'Crédito de vivienda') {
-                  print('0.1');
                   creditcontroller.interest = 0.1;
                 }
                 if (value == 'Crédito de libre inversión') {
-                  print('0.35');
                   creditcontroller.interest = 0.35;
                 }
 
@@ -89,10 +87,6 @@ class SimulatorScreen extends StatelessWidget {
               height: 10,
             ),
             Custominput(
-                onChanged: (p0) {
-                  creditcontroller.valuecontroller.text =
-                      creditcontroller.maxdebt();
-                },
                 inputType: TextInputType.number,
                 hint: '\$ 10’000.000,00',
                 validator: (p0) {
@@ -110,7 +104,6 @@ class SimulatorScreen extends StatelessWidget {
             ),
             Custominput(
               hint: '0',
-              enable: false,
               controller: creditcontroller.valuecontroller,
             ),
             const Text(
@@ -131,7 +124,7 @@ class SimulatorScreen extends StatelessWidget {
                   return 'Minimo 12 cuotas y maximo 84 cuotas';
                 }
               },
-              controller: creditcontroller.feecontroller,
+              controller: creditcontroller.quotacontroller,
             ),
             const Text(
               ' Elije un plazo desde 12 hasta 84 meses',
@@ -148,7 +141,8 @@ class SimulatorScreen extends StatelessWidget {
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold)),
                 ontap: () async {
-                  if (_key.currentState!.validate()) {
+                  if (_key.currentState!.validate() &&
+                      creditcontroller.interest != 0) {
                     final response = await creditcontroller.simulate();
                     showModalBottomSheet(
                         context: context,
@@ -159,10 +153,14 @@ class SimulatorScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             height: MediaQuery.of(context).size.height * 0.50,
-                            child: MaxCuotaModal(),
+                            child: MaxCuotaModal(
+                              maxcuotadebt: creditcontroller.maxdebt(),
+                            ),
                           );
                         });
                     // Get.offAllNamed('/loading');
+                  } else {
+                    Get.snackbar('Error', 'Debe llenar todos los campos');
                   }
                 },
               ),

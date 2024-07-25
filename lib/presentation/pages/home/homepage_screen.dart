@@ -61,8 +61,10 @@ class HomepageScreen extends GetWidget<CreditController> {
                       ),
                     ),
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
                         index = 1;
+                        await creditcontroller.getCredits();
+
                         creditcontroller.update(['homeview']);
                       },
                       child: SizedBox(
