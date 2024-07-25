@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'dart:math' as math;
 
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class CreditController extends GetxController {
   final CreditRepositoryInterface creditRepositoryInterface;
@@ -83,39 +84,50 @@ class CreditController extends GetxController {
 
   exportToExcel(List<Cuota> listcuota) async {
     try {
-      var excel = Excel.createExcel();
-      Sheet sheetObject = excel['data'];
-      var cell = sheetObject.cell(CellIndex.indexByString('A1'));
-      cell.value = TextCellValue('No. cuota');
-      var cell2 = sheetObject.cell(CellIndex.indexByString('A2'));
-      cell2.value = TextCellValue('Valor Cuota');
-      var cell3 = sheetObject.cell(CellIndex.indexByString('A3'));
-      cell3.value = TextCellValue('Interes');
-      var cell4 = sheetObject.cell(CellIndex.indexByString('A4'));
-      cell4.value = TextCellValue('Abono a capital');
+      final status = await Permission.storage.request();
+      if (status.isGranted || await Permission.storage.request().isGranted) {
+        var excel = Excel.createExcel();
+        Sheet sheetObject = excel['data'];
+        var cell = sheetObject.cell(CellIndex.indexByString('A1'));
+        cell.value = TextCellValue('No. cuota');
+        var cell2 = sheetObject.cell(CellIndex.indexByString('A2'));
+        cell2.value = TextCellValue('Valor Cuota');
+        var cell3 = sheetObject.cell(CellIndex.indexByString('A3'));
+        cell3.value = TextCellValue('Interes');
+        var cell4 = sheetObject.cell(CellIndex.indexByString('A4'));
+        cell4.value = TextCellValue('Abono a capital');
 
-      for (var row = 0; row < listcuota.length; row++) {
-        sheetObject
-            .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: row + 1))
-            .value = IntCellValue(listcuota[row].numeroCuota);
-        sheetObject
-            .cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: row + 1))
-            .value = DoubleCellValue(listcuota[row].valorCuota);
-        sheetObject
-            .cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: row + 1))
-            .value = DoubleCellValue(listcuota[row].interes);
-        sheetObject
-            .cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: row + 1))
-            .value = DoubleCellValue(listcuota[row].abonoCapital);
+        for (var row = 0; row < listcuota.length; row++) {
+          sheetObject
+              .cell(
+                  CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: row + 1))
+              .value = IntCellValue(listcuota[row].numeroCuota);
+          sheetObject
+              .cell(
+                  CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: row + 1))
+              .value = DoubleCellValue(listcuota[row].valorCuota);
+          sheetObject
+              .cell(
+                  CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: row + 1))
+              .value = DoubleCellValue(listcuota[row].interes);
+          sheetObject
+              .cell(
+                  CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: row + 1))
+              .value = DoubleCellValue(listcuota[row].abonoCapital);
+        }
+
+        var fileBytes = excel.save();
+        var directory = await getApplicationDocumentsDirectory();
+
+        File(('$directory/output_file_name.xlsx'))
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(fileBytes!);
+      } else {
+        await Permission.storage.request();
       }
-
-      var fileBytes = excel.save();
-      var directory = await getApplicationDocumentsDirectory();
-
-      File(('$directory/output_file_name.xlsx'))
-        ..createSync(recursive: true)
-        ..writeAsBytesSync(fileBytes!);
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 }
 
