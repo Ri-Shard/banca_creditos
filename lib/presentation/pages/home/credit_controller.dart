@@ -10,6 +10,7 @@ import 'dart:math' as math;
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:external_path/external_path.dart';
 
 class CreditController extends GetxController {
   final CreditRepositoryInterface creditRepositoryInterface;
@@ -85,16 +86,19 @@ class CreditController extends GetxController {
   exportToExcel(List<Cuota> listcuota) async {
     try {
       final status = await Permission.storage.request();
-      if (status.isGranted || await Permission.storage.request().isGranted) {
+      final permission = await Permission.manageExternalStorage.request();
+      if (status.isGranted ||
+          await Permission.storage.request().isGranted ||
+          permission.isGranted) {
         var excel = Excel.createExcel();
         Sheet sheetObject = excel['data'];
         var cell = sheetObject.cell(CellIndex.indexByString('A1'));
         cell.value = TextCellValue('No. cuota');
-        var cell2 = sheetObject.cell(CellIndex.indexByString('A2'));
+        var cell2 = sheetObject.cell(CellIndex.indexByString('B1'));
         cell2.value = TextCellValue('Valor Cuota');
-        var cell3 = sheetObject.cell(CellIndex.indexByString('A3'));
+        var cell3 = sheetObject.cell(CellIndex.indexByString('C1'));
         cell3.value = TextCellValue('Interes');
-        var cell4 = sheetObject.cell(CellIndex.indexByString('A4'));
+        var cell4 = sheetObject.cell(CellIndex.indexByString('D1'));
         cell4.value = TextCellValue('Abono a capital');
 
         for (var row = 0; row < listcuota.length; row++) {
@@ -115,15 +119,18 @@ class CreditController extends GetxController {
                   CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: row + 1))
               .value = DoubleCellValue(listcuota[row].abonoCapital);
         }
-        var directory = await path.getApplicationDocumentsDirectory();
-        var exampleDirectory = Directory('${directory.path}/example');
+
+        var directory = await ExternalPath.getExternalStoragePublicDirectory(
+            ExternalPath.DIRECTORY_DOWNLOADS);
+        print(directory);
+        var exampleDirectory = Directory('${directory}/example');
         if (!await exampleDirectory.exists()) {
           await exampleDirectory.create();
         }
-        print(directory.path);
+        print('${directory}/example/example.xlsx');
         final bytes = excel.encode();
         if (bytes != null) {
-          File('${directory.path}/example/example.xlsx')
+          File('${directory}/example/example.xlsx')
             ..createSync()
             ..writeAsBytesSync(bytes);
         }

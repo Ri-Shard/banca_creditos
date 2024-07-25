@@ -55,19 +55,19 @@ appRoutes() => [
           transitionDuration: const Duration(milliseconds: 200),
           binding: CreditBinding()),
       GetPage(
-          name: '/loading',
-          page: () => const LoaderWidget(),
-          middlewares: [MyMiddelware()],
-          transition: Transition.downToUp,
-          transitionDuration: const Duration(milliseconds: 200),
-          binding: CreditBinding()),
+        name: '/loading',
+        page: () => const LoaderWidget(),
+        middlewares: [MyMiddelware()],
+        transition: Transition.downToUp,
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
       GetPage(
-          name: '/result',
-          page: () => CreditResultScreen(),
-          middlewares: [MyMiddelware()],
-          transition: Transition.downToUp,
-          transitionDuration: const Duration(milliseconds: 200),
-          binding: CreditBinding()),
+        name: '/result',
+        page: () => CreditResultScreen(),
+        middlewares: [MyMiddelware()],
+        transition: Transition.downToUp,
+        transitionDuration: const Duration(milliseconds: 200),
+      ),
     ];
 
 class MyMiddelware extends GetMiddleware {

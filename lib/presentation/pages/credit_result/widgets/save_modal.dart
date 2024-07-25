@@ -83,7 +83,7 @@ class SaveModal extends StatelessWidget {
                       color: MyTheme.purplebutton,
                       fontWeight: FontWeight.bold)),
               ontap: () {
-                Get.offAllNamed('/home');
+                Get.toNamed('/home');
               },
             ),
           ),

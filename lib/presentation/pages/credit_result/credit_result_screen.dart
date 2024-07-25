@@ -126,6 +126,7 @@ class CreditResultScreen extends StatelessWidget {
                       color: Colors.white, fontWeight: FontWeight.bold)),
               ontap: () async {
                 await creditcontroller.exportToExcel(table);
+                Get.snackbar('Guardado en:', 'Download/example/example.xlsx');
               },
             ),
             const SizedBox(

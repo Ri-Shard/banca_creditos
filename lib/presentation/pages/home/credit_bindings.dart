@@ -7,5 +7,6 @@ class CreditBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => CreditController(creditRepositoryInterface: Get.find()));
+    Get.lazyPut(() => LoginController(loginRepositoryInterface: Get.find()));
   }
 }

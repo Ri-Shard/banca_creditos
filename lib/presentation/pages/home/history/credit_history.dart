@@ -79,8 +79,11 @@ class CreditHistoryScreen extends StatelessWidget {
                   return DataRow(
                     onSelectChanged: (value) {
                       creditcontroller.valuecontroller.text = row.amount;
+                      creditcontroller.maxdebtresult = row.amount;
                       creditcontroller.quotacontroller.text = row.quota;
                       creditcontroller.interest = row.interest;
+
+                      creditcontroller.simulatequota();
                       Get.toNamed('/result', arguments: true);
                     },
                     cells: [
