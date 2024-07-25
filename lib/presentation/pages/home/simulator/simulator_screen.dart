@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 class SimulatorScreen extends StatelessWidget {
   final GlobalKey<FormState> _key = GlobalKey();
   final creditcontroller = Get.find<CreditController>();
-  final logincontroller = Get.find<LoginController>();
+  // final logincontroller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class SimulatorScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Hola ${logincontroller.name} 👋',
+                    'Hola  👋',
                     style: TextStyle(fontSize: 24),
                   ),
                   IconButton(
