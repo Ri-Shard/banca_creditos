@@ -37,12 +37,16 @@ class LoginReprositoryImpl extends LoginRepositoryInterface {
   }
 
   @override
-  String verifyUser() {
+  Future<String> verifyUser() async {
     User? auxUser = supabase.auth.currentUser;
     if (auxUser == null) {
       return 'login';
     } else {
-      return 'logged';
+      final name = await supabase
+          .from('userbank')
+          .select('name')
+          .eq('email', auxUser.email!);
+      return name[0]['name'];
     }
   }
 }

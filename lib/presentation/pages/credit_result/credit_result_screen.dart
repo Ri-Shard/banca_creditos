@@ -6,6 +6,7 @@ import 'package:banca_creditos/presentation/widgets/buttons.dart';
 import 'package:banca_creditos/presentation/widgets/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CreditResultScreen extends StatelessWidget {
   CreditResultScreen({super.key});
@@ -15,7 +16,7 @@ class CreditResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final localwidth = MediaQuery.of(context).size.width;
     final ishistory = Get.arguments;
-
+    NumberFormat currencyFormat = NumberFormat.simpleCurrency();
     List<Cuota> table = creditcontroller.calcularTablaAmortizacion(
         double.parse(creditcontroller.valuecontroller.text),
         int.parse(creditcontroller.quotacontroller.text),
@@ -105,10 +106,10 @@ class CreditResultScreen extends StatelessWidget {
                     return DataRow(
                       cells: [
                         DataCell(Text(row.numeroCuota.toString())),
-                        DataCell(Text(row.valorCuota.toStringAsFixed(2),
+                        DataCell(Text(currencyFormat.format(row.valorCuota),
                             style: TextStyle(color: MyTheme.textGray))),
-                        DataCell(Text(row.interes.toStringAsFixed(2))),
-                        DataCell(Text(row.abonoCapital.toStringAsFixed(2),
+                        DataCell(Text('${row.interes.toStringAsFixed(2)}%')),
+                        DataCell(Text(currencyFormat.format(row.abonoCapital),
                             style: TextStyle(
                                 color: Colors.green,
                                 fontWeight: FontWeight.bold))),

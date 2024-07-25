@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
 
+import 'package:path_provider/path_provider.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -19,8 +20,9 @@ class CreditController extends GetxController {
   final TextEditingController quotacontroller = TextEditingController();
   final TextEditingController valuecontroller = TextEditingController();
   double interest = 0;
-  double simulateresult = 0;
+  double quotavalor = 0;
   String maxdebtresult = '';
+  String maxdebtresultNoformat = '';
   List<Credit> creditslist = [];
 
   Future<List<Credit>> getCredits() async {
@@ -31,39 +33,37 @@ class CreditController extends GetxController {
   String maxdebt() {
     final salary = int.parse(salarycontroller.text);
 
-    maxdebtresult = (((salary) * 7) / 0.15).toStringAsFixed(2);
+    maxdebtresult = ((((salary) * 7) / 0.15) * 0.001).toStringAsFixed(2);
     return maxdebtresult;
   }
 
-  String simulate() {
+  String simulatequota() {
     int cantidadcuotas = int.parse(quotacontroller.text);
-    int deuda = int.parse(valuecontroller.text);
 
-    double numerador = deuda * interest;
+    double numerador = double.parse(maxdebtresult) * interest;
     num denominador = 1 - math.pow(1 + interest, -cantidadcuotas);
-    simulateresult = numerador / denominador;
+    quotavalor = numerador / denominador;
 
-    return simulateresult.toStringAsFixed(2);
+    return quotavalor.toStringAsFixed(2);
   }
 
   List<Cuota> calcularTablaAmortizacion(
       double saldo, int nrocuotas, double interes) {
     List<Cuota> tablaAmortizacion = [];
-    double valorCuota = saldo / nrocuotas;
     for (int i = 1; i <= nrocuotas; i++) {
       double interesSaldo = saldo * interes;
 
-      double abonoCapital = valorCuota - interesSaldo;
+      double abonoCapital = quotavalor - interesSaldo;
 
       if (saldo - abonoCapital < 0) {
         abonoCapital = saldo;
-        valorCuota = abonoCapital + interesSaldo;
+        quotavalor = abonoCapital + interesSaldo;
       }
       tablaAmortizacion.add(
         Cuota(
           numeroCuota: i,
-          valorCuota: valorCuota,
-          interes: interesSaldo,
+          valorCuota: quotavalor,
+          interes: interes * 100,
           abonoCapital: abonoCapital,
         ),
       );
@@ -115,13 +115,18 @@ class CreditController extends GetxController {
                   CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: row + 1))
               .value = DoubleCellValue(listcuota[row].abonoCapital);
         }
-
-        var fileBytes = excel.save();
-        var directory = await getApplicationDocumentsDirectory();
-
-        File(('$directory/output_file_name.xlsx'))
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(fileBytes!);
+        var directory = await path.getApplicationDocumentsDirectory();
+        var exampleDirectory = Directory('${directory.path}/example');
+        if (!await exampleDirectory.exists()) {
+          await exampleDirectory.create();
+        }
+        print(directory.path);
+        final bytes = excel.encode();
+        if (bytes != null) {
+          File('${directory.path}/example/example.xlsx')
+            ..createSync()
+            ..writeAsBytesSync(bytes);
+        }
       } else {
         await Permission.storage.request();
       }

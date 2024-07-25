@@ -3,11 +3,13 @@ import 'package:banca_creditos/presentation/pages/home/credit_controller.dart';
 import 'package:banca_creditos/presentation/widgets/my_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CreditHistoryScreen extends StatelessWidget {
   final creditcontroller = Get.find<CreditController>();
   @override
   Widget build(BuildContext context) {
+    NumberFormat currencyFormat = NumberFormat.simpleCurrency();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ListView(
@@ -82,13 +84,14 @@ class CreditHistoryScreen extends StatelessWidget {
                       Get.toNamed('/result', arguments: true);
                     },
                     cells: [
-                      DataCell(Text(row.amount.toString(),
+                      DataCell(Text(
+                          currencyFormat.format(double.parse(row.amount)),
                           textAlign: TextAlign.center,
                           style: const TextStyle(color: MyTheme.textGray))),
                       DataCell(Text(row.date,
                           style: const TextStyle(color: MyTheme.textBlack))),
                       DataCell(Text(row.quota)),
-                      DataCell(Text(row.interest.toString(),
+                      DataCell(Text('${row.interest * 100}%',
                           style: const TextStyle(
                               color: MyTheme.textBlack,
                               fontWeight: FontWeight.bold))),

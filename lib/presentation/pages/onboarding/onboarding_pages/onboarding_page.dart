@@ -44,7 +44,7 @@ class OnboardingPage extends StatelessWidget {
                       color: MyTheme.black, fontWeight: FontWeight.bold)),
               ontap: () async {
                 final response = await authcontroller.verifyUser();
-                if (response == 'logged') {
+                if (response != 'login') {
                   Get.offAllNamed('/home');
                 } else {
                   Get.offAllNamed('/login');

@@ -12,8 +12,10 @@ class LoginController extends GetxController {
   final TextEditingController idcontroller = TextEditingController();
   final TextEditingController namecontroller = TextEditingController();
 
+  String name = '';
   @override
   void onReady() {
+    verifyUser();
     super.onReady();
   }
 
@@ -36,6 +38,7 @@ class LoginController extends GetxController {
 
   verifyUser() async {
     final response = await loginRepositoryInterface.verifyUser();
+    name = response;
     return response;
   }
 }
