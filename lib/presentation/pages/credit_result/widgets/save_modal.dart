@@ -83,18 +83,7 @@ class SaveModal extends StatelessWidget {
                       color: MyTheme.purplebutton,
                       fontWeight: FontWeight.bold)),
               ontap: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (builder) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: MyTheme.backgroundwhite,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        height: MediaQuery.of(context).size.height * 0.50,
-                        child: SaveModal(),
-                      );
-                    });
+                Get.back();
               },
             ),
           ),

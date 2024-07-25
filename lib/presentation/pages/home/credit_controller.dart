@@ -4,6 +4,7 @@ import 'package:banca_creditos/domain/repositories/credit_repository.dart';
 import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'dart:math' as math;
 
 import 'package:path_provider/path_provider.dart';
@@ -44,25 +45,24 @@ class CreditController extends GetxController {
     return simulateresult.toStringAsFixed(2);
   }
 
-  List<Cuota> calcularTablaAmortizacion() {
+  List<Cuota> calcularTablaAmortizacion(
+      double saldo, int nrocuotas, double interes) {
     List<Cuota> tablaAmortizacion = [];
-    double saldo = double.parse(valuecontroller.text);
-    double valorCuota =
-        double.parse(valuecontroller.text) / int.parse(quotacontroller.text);
-    for (int i = 1; i <= int.parse(quotacontroller.text); i++) {
-      double interes = saldo * interest;
+    double valorCuota = saldo / nrocuotas;
+    for (int i = 1; i <= nrocuotas; i++) {
+      double interesSaldo = saldo * interes;
 
-      double abonoCapital = valorCuota - interes;
+      double abonoCapital = valorCuota - interesSaldo;
 
       if (saldo - abonoCapital < 0) {
         abonoCapital = saldo;
-        valorCuota = abonoCapital + interes;
+        valorCuota = abonoCapital + interesSaldo;
       }
       tablaAmortizacion.add(
         Cuota(
           numeroCuota: i,
           valorCuota: valorCuota,
-          interes: interes,
+          interes: interesSaldo,
           abonoCapital: abonoCapital,
         ),
       );
@@ -75,7 +75,7 @@ class CreditController extends GetxController {
   Future<String> saveCredit() async {
     final response = await creditRepositoryInterface.saveCredit(Credit('',
         amount: valuecontroller.text,
-        date: DateTime.now().toString(),
+        date: DateFormat('dd/MM/yy').format(DateTime.now()),
         quota: quotacontroller.text,
         interest: interest));
     return response;

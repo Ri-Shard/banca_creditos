@@ -14,7 +14,12 @@ class CreditResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localwidth = MediaQuery.of(context).size.width;
-    List<Cuota> table = creditcontroller.calcularTablaAmortizacion();
+    final ishistory = Get.arguments;
+
+    List<Cuota> table = creditcontroller.calcularTablaAmortizacion(
+        double.parse(creditcontroller.valuecontroller.text),
+        int.parse(creditcontroller.quotacontroller.text),
+        creditcontroller.interest);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -125,31 +130,34 @@ class CreditResultScreen extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 50),
-              child: Buttons(
-                color: Colors.white,
-                borderColor: MyTheme.purplebutton,
-                content: const Text('Guardar cotización',
-                    style: TextStyle(
-                        color: MyTheme.purplebutton,
-                        fontWeight: FontWeight.bold)),
-                ontap: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (builder) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: MyTheme.backgroundwhite,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          height: MediaQuery.of(context).size.height * 0.50,
-                          child: SaveModal(),
-                        );
-                      });
-                },
-              ),
-            ),
+            ishistory == null
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 50),
+                    child: Buttons(
+                      color: Colors.white,
+                      borderColor: MyTheme.purplebutton,
+                      content: const Text('Guardar cotización',
+                          style: TextStyle(
+                              color: MyTheme.purplebutton,
+                              fontWeight: FontWeight.bold)),
+                      ontap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (builder) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  color: MyTheme.backgroundwhite,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                height:
+                                    MediaQuery.of(context).size.height * 0.50,
+                                child: SaveModal(),
+                              );
+                            });
+                      },
+                    ),
+                  )
+                : Container()
           ],
         ),
       ),

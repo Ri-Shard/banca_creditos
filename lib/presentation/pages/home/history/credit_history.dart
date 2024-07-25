@@ -46,6 +46,7 @@ class CreditHistoryScreen extends StatelessWidget {
             child: SizedBox(
               width: 20,
               child: DataTable(
+                showCheckboxColumn: false,
                 horizontalMargin: 1,
                 columnSpacing: 0,
                 dataRowHeight: 40,
@@ -74,83 +75,33 @@ class CreditHistoryScreen extends StatelessWidget {
                 ],
                 rows: creditcontroller.creditslist.map((row) {
                   return DataRow(
+                    onSelectChanged: (value) {
+                      creditcontroller.valuecontroller.text = row.amount;
+                      creditcontroller.quotacontroller.text = row.quota;
+                      creditcontroller.interest = row.interest;
+                      Get.toNamed('/result', arguments: true);
+                    },
                     cells: [
-                      DataCell(Text(row.amount.toString())),
+                      DataCell(Text(row.amount.toString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: MyTheme.textGray))),
                       DataCell(Text(row.date,
-                          style: TextStyle(color: MyTheme.textGray))),
+                          style: const TextStyle(color: MyTheme.textBlack))),
                       DataCell(Text(row.quota)),
                       DataCell(Text(row.interest.toString(),
-                          style: TextStyle(
-                              color: Colors.green,
+                          style: const TextStyle(
+                              color: MyTheme.textBlack,
                               fontWeight: FontWeight.bold))),
                     ],
                   );
                 }).toList(),
-                //  const <DataRow>[
-                //   DataRow(
-                //     cells: <DataCell>[
-                //       DataCell(Center(
-                //         child: Text(
-                //           '\$12.000.000',
-                //           textAlign: TextAlign.center,
-                //           style: TextStyle(color: MyTheme.textGray),
-                //         ),
-                //       )),
-                //       DataCell(Center(
-                //         child: Text(
-                //           '12/10/23',
-                //           textAlign: TextAlign.center,
-                //           style: TextStyle(color: MyTheme.textBlack),
-                //         ),
-                //       )),
-                //       DataCell(Center(
-                //           child: Text(
-                //         '12',
-                //       ))),
-                //       DataCell(Center(
-                //         child: Text('1.5%',
-                //             style: TextStyle(
-                //               color: MyTheme.textBlack,
-                //             )),
-                //       )),
-                //     ],
-                //   ),
-                //   DataRow(
-                //     cells: <DataCell>[
-                //       DataCell(Center(
-                //         child: Text(
-                //           '\$12.000.000',
-                //           textAlign: TextAlign.center,
-                //           style: TextStyle(color: MyTheme.textGray),
-                //         ),
-                //       )),
-                //       DataCell(Center(
-                //         child: Text(
-                //           '12/10/23',
-                //           textAlign: TextAlign.center,
-                //           style: TextStyle(color: MyTheme.textBlack),
-                //         ),
-                //       )),
-                //       DataCell(Center(
-                //           child: Text(
-                //         '12',
-                //       ))),
-                //       DataCell(Center(
-                //         child: Text('1.5%',
-                //             style: TextStyle(
-                //               color: MyTheme.textBlack,
-                //             )),
-                //       )),
-                //     ],
-                //   ),
-                // ],
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
@@ -163,7 +114,7 @@ class CreditHistoryScreen extends StatelessWidget {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
         ],
